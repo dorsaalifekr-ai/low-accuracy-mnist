@@ -1,3 +1,5 @@
+released in 2024
+
 # MNIST — Minimal Model (Intentionally Low Accuracy) 
 
 This repository contains a single Python script, `low_accuracy_mnist.py`, that **intentionally** trains a very small model on MNIST to demonstrate a basic deep‑learning workflow (Load → Train → Evaluate → Visualize).  
