@@ -1,115 +1,114 @@
+# MNIST — Minimal Model (Intentionally Low Accuracy) 
 
-# MNIST — مدل ساده با دقت پایین (آموزشی)
+This repository contains a single Python script, `low_accuracy_mnist.py`, that **intentionally** trains a very small model on MNIST to demonstrate a basic deep‑learning workflow (Load → Train → Evaluate → Visualize).  
+Because the architecture is tiny and the training subset is limited, the resulting performance is **deliberately low** (useful for teaching/experiments).
 
-این مخزن شامل یک اسکریپت پایتون به نام `low_accuracy_mnist.py` است که **به‌صورت عمدی** یک مدل بسیار ساده روی دیتاست MNIST آموزش می‌دهد تا:
-- جریان پایه‌ی یک پروژه یادگیری عمیق (Load → Train → Evaluate → Visualize) را نشان دهد،
-- و در عین حال به‌دلیل معماری بسیار کوچک و محدودیت داده‌ی آموزشی، **دقت نهایی پایین**ی داشته باشد (برای اهداف آموزشی/آزمایشی).
-
-> اگر به دنبال دقت بالاتر هستید، بخش «بهبود دقت» را ببینید.
+> If you need higher accuracy, see **Improve Accuracy (Optional)** below.
 
 
-## محتوای مخزن
-- `low_accuracy_mnist.py` — کد اصلی آموزش و ارزیابی مدل ساده MNIST.
-- `README.md` — همین فایل راهنما.
+## Repository Contents
+- `low_accuracy_mnist.py` — main training/evaluation script.
+- `README.md` — this file.
 
 
-## پیش‌نیازها
-Python 3.8+ توصیه می‌شود. کتابخانه‌های مورد نیاز:
+## Requirements
+Python 3.8+ recommended. Install dependencies:
 ```bash
 pip install torch torchvision matplotlib
 ```
-> **نکته:** روی macOS یا محیط‌های headless/سرور، backend پیش‌فرض Matplotlib ممکن است مشکل داشته باشد (کد از `TkAgg` استفاده می‌کند). اگر خطای backend گرفتید، بخش «مشکلات رایج» را ببینید.
+> On macOS or headless servers (e.g., Colab), the default Matplotlib backend (`TkAgg`) may not be available. See **Common Issues**.
 
 
-## اجرای سریع (لوکال)
-1) کلون/دانلود پروژه و ورود به پوشه:
+## Quick Start (Local)
+1. Clone/download and enter the folder:
 ```bash
 git clone <YOUR-REPO-URL>
 cd <YOUR-REPO-FOLDER>
 ```
-2) نصب وابستگی‌ها:
+2. Install dependencies:
 ```bash
 pip install torch torchvision matplotlib
 ```
-3) اجرا:
+3. Run:
 ```bash
 python low_accuracy_mnist.py
 ```
-در اولین اجرا دیتاست MNIST به صورت خودکار در پوشه `data/` دانلود می‌شود. خروجی شامل **Train Acc** برای هر epoch و در پایان **Test Accuracy** و یک پنجره‌ی نمایش پیش‌بینی‌های نمونه است.
+The MNIST dataset will be downloaded automatically into `data/` on first run. The script prints **Train Accuracy** per epoch and, at the end, **Test Accuracy**. It also shows a small grid of sample predictions.
 
 
-## اجرای سریع (Google Colab)
-- فایل `low_accuracy_mnist.py` را آپلود کنید یا محتوا را در یک سلول Colab کپی کنید.
-- نصب پیش‌نیازها:
+## Quick Start (Google Colab)
+- Upload `low_accuracy_mnist.py` or copy the code into a Colab cell.
+- Install requirements:
 ```python
 !pip install torch torchvision matplotlib
 ```
-- برای Colab (محیط headless) بهتر است خط زیر را در اسکریپت **کامنت** کنید یا به `Agg` تغییر دهید:
+- Since Colab is headless, either **comment out** the Matplotlib backend line or switch it to `Agg`:
 ```python
-# matplotlib.use("TkAgg")   # در Colab: این خط را حذف/کامنت کنید
+# matplotlib.use("TkAgg")  # comment/remove in Colab, or:
+# import matplotlib
+# matplotlib.use("Agg")
 ```
-- سپس اسکریپت را اجرا کنید. برای دیدن شکل به جای `plt.show()` می‌توانید از `plt.savefig("preds.png", dpi=150)` استفاده کنید.
+- Replace `plt.show()` with `plt.savefig("preds.png", dpi=150)` if you need an image file rather than a pop‑up window.
 
 
-## ساختار/منطق کد
-- **مدل:** `SimpleDigitNet` با تنها یک لایه‌ی مخفی 5-نودی → عمداً کوچک و کم‌توان.
-- **داده‌ها:** روی 6000 نمونه‌ی اولِ train (به‌صورت زیرمجموعه) آموزش می‌دهد تا خروجی ضعیف حاصل شود.
-- **بهینه‌ساز:** `SGD` با `lr=0.005`.
-- **نمایش:** تابع `show_predictions` چند نمونه از پیش‌بینی‌ها را نمایش می‌دهد.
+## Code Structure (What the script does)
+- **Model**: `SimpleDigitNet` with a single tiny hidden layer (5 units) → intentionally underpowered.
+- **Data**: Trains on a **subset** of the MNIST training set (e.g., first 6,000 samples) to keep accuracy low on purpose.
+- **Optimizer**: `SGD` with a small learning rate (e.g., 0.005).
+- **Visualization**: `show_predictions` creates a simple grid of images with predicted labels.
 
-> این تنظیمات عمداً برای «دقت پایین» انتخاب شده‌اند تا تفاوت با تنظیمات قوی‌تر به‌خوبی دیده شود.
-
-
-## نتایج مورد انتظار
-- دقت آموزش و تست بسته به سخت‌افزار/نسخه کتابخانه‌ها کمی متفاوت است، اما انتظار نداشته باشید که به دقت‌های رایج (>97%) برسد؛ این پروژه **آموزشی** است.
+These choices make it easier to contrast with stronger baselines later.
 
 
-## بهبود دقت (اختیاری)
-اگر می‌خواهید همان کد را به‌تدریج قوی‌تر کنید، می‌توانید تغییرات زیر را مرحله‌ای اعمال کنید:
-1) **بزرگ‌تر کردن مدل:**
-   - افزایش اندازه لایه‌ی مخفی (مثلاً از 5 به 128 یا 256).
-   - افزودن یک یا دو لایه‌ی Fully-Connected دیگر.
-2) **دیتای بیشتر:** به‌جای زیرمجموعه 6000تایی، کل MNIST train را استفاده کنید.
-3) **Optimizer بهتر:** `Adam` با `lr=1e-3`.
-4) **Epoch بیشتر:** از 10 به 20–30 افزایش دهید، همراه با Early Stopping.
-5) **معماری کانولوشنی:** به‌جای MLP ساده، از CNNهای کم‌حجم (Conv2d/MaxPool) استفاده کنید.
-6) **افزودن Dropout/BatchNorm** برای پایداری بیشتر.
-7) **تنظیم نرخ یادگیری** (LR Scheduling).
+## Expected Results
+Results vary slightly by environment and library versions. Do **not** expect typical MNIST accuracies (>97%). This project is for **didactic** purposes.
 
-نمونه‌ی کوچک برای تغییر اندازه‌ی لایه:
+
+## Improve Accuracy (Optional)
+If you want to turn this into a stronger baseline, consider the following incremental changes:
+1. **Wider/Deeper MLP**
+   - Increase the hidden layer (e.g., from 5 → 128 or 256).
+   - Add one or two additional fully connected layers.
+2. **Use the full training set** instead of a 6k subset.
+3. **Optimizer**: switch to `Adam` with `lr=1e-3`.
+4. **Train longer** (20–30 epochs) with early stopping.
+5. **Use a small CNN** (Conv2d + MaxPool) instead of a plain MLP.
+6. Add **Dropout/BatchNorm** and/or a **learning‑rate scheduler**.
+
+Example tweak:
 ```python
 self.layer1 = nn.Linear(28*28, 128)
 self.output = nn.Linear(128, 10)
 ```
 
 
-## مشکلات رایج و راه‌حل‌ها
-- **ارور مربوط به Matplotlib backend (TkAgg):**
-  - روی Colab یا سرورها، `TkAgg` معمولاً در دسترس نیست. راه‌حل‌ها:
-    - خط `matplotlib.use("TkAgg")` را کامنت کنید؛
-    - یا آن را به `Agg` تغییر دهید:
-      ```python
-      matplotlib.use("Agg")
-      ```
-    - سپس به‌جای `plt.show()` از `plt.savefig("preds.png", dpi=150)` استفاده کنید.
-- **CUDA در دسترس نیست:** کد به‌طور خودکار روی CPU می‌افتد. برای سرعت بالاتر، CUDA را روی ماشین سازگار نصب/فعال کنید.
+## Common Issues
+- **Matplotlib backend error (`TkAgg`) on Colab/servers**  
+  - Comment out `matplotlib.use("TkAgg")` or set:
+    ```python
+    import matplotlib
+    matplotlib.use("Agg")
+    ```
+  - Use `plt.savefig("preds.png", dpi=150)` instead of `plt.show()`.
+- **CUDA not available**  
+  - The script will fall back to CPU automatically. For speed, run on a CUDA‑enabled machine.
 
 
-## سفارشی‌سازی خروجی برای گزارش/ارائه
-- چاپ دقیق‌تر لاگ‌ها (Loss میانگین هر epoch، زمان هر epoch).
-- ذخیره‌ی Checkpoint بهترین مدل:
+## Tips for Reports/Slides
+- Print cleaner logs (average loss per epoch, epoch time).
+- Save the best checkpoint:
 ```python
 torch.save(model.state_dict(), "mnist_simple.pt")
 ```
-- ذخیره‌ی تصویر پیش‌بینی‌ها:
+- Save the predictions grid:
 ```python
 plt.savefig("preds.png", dpi=150)
 ```
 
 
-## لایسنس
-MIT — در صورت نیاز، متن لایسنس را در فایل `LICENSE` اضافه کنید.
+## License
+MIT. Add a `LICENSE` file if needed.
 
 
-## استناد (Citation)
-در صورت استفاده آموزشی/پژوهشی، ارجاع به این ریپو/فایل کفایت می‌کند. اگر از MNIST استفاده می‌کنید، به مقاله‌ی LeCun et al. (1998) ارجاع دهید.
+## Citation
+If you use this repo for teaching/research, a simple reference to the repository/script is sufficient. For the dataset, please cite LeCun et al. (1998).
